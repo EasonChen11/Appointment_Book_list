@@ -40,6 +40,8 @@ void change(Record book[], int change1, int change2);
 
 void print_data(Record book[],int count);
 
+void ShowDates(Record Book[], int count, char date[]);
+
 // Start of a main program
 int main (void)
 {
@@ -151,10 +153,33 @@ void EnterRecord (Record Book[], int * count)
 void ViewDay (Record Book[], int count)
 {
     char date[WHEN_LEN];
-    int end=1;
     printf("\nViewDay -- to show the appointments of a given day\n");
     printf("Please enter the day (yyyymmdd) to view: ");
     new_gets(date,WHEN_LEN);
+    ShowDates(Book,count,date);
+}
+
+void ViewWeek (Record Book [], int count)
+{
+    char date[WHEN_LEN];
+    int i=0;
+
+    printf("\nViewWeek -- to show the appintments of a given week\n");
+    printf("Please enter the day (yymmdd) to view: ");
+    new_gets(date,WHEN_LEN);
+    do {
+        ShowDates (Book, count, date);
+        date[5] = date[5] + 1;    // increment one day per loop
+        if ((date[5] - '0') > 9) {
+            date [4] = date[4] + 1;
+            date [5] = date[5] - 10;
+        }
+        ++ i;
+    } while (i < 7);   // 7 days to increment
+}
+
+void ShowDates(Record Book[], int count, char date[]) {
+    int end=1;
     for(int i=0;i<count;i++){
         if (strncmp(date, Book[i].when,strlen(date)) == 0) {//if date = when print data
             printf("%d:\n",i);
@@ -166,14 +191,11 @@ void ViewDay (Record Book[], int count)
         }
     }
     if(end){//if no data match
-        printf("No data matches the criteria\n");
+        printf("%s No data matches the criteria\n",date);
     }
+
 }
 
-void ViewWeek (Record Book [], int count)
-{
-    printf("\nViewWeek -- to show the appintments of a given week\n");
-}
 
 void Modify (Record Book [], int count)
 {
