@@ -90,7 +90,7 @@ void ReadFromFile (Record * Book, int * count, char buff[])
 
     printf("Please enter a absolute path of file to open/save: ");
     scanf("%s", buff);
-    strcpy(buff , "C:\\Users\\ysche\\Desktop\\Appointment Book list/data.txt\0");
+    //strcpy(buff , "C:\\Users\\ysche\\Desktop\\Appointment Book list/data.txt\0");
     printf("Opening file: %s ....\n", buff);
     if( (filePointer = fopen(buff,"r")) == NULL){
         fclose(filePointer);
