@@ -220,7 +220,7 @@ void Modify (Record Book [], int count)
     scanf("%d",&change);
     assert(change<=count);//enter two indexes to change
     change--;
-    rewind(stdin);
+    rewind(stdin);//clear
     printf("Please enter WHOM you have an appointment with: <%d",WHO_LEN-1);
     new_gets(Book[change].who,WHO_LEN);
     printf("Please enter WHAT the event is: <%d",WHAT_LEN-1);
