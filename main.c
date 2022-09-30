@@ -35,7 +35,7 @@ void Modify (Record *, int);
 void Delete (Record *, int *);
 void Search (Record *, int);
 void Quit (Record *, int, char *);
-
+void Change(Record *,int);
 void change(Record book[], int change1, int change2);
 
 void print_data(Record book[],int count);
@@ -67,6 +67,8 @@ int main (void)
                     break;
             case 6: Search(AppBook, count);
                     break;
+            case 7:Change(AppBook, count);
+                    break;
             case 9: Quit(AppBook, count, fileName);
                     quit = 1;
                     break;
@@ -81,6 +83,7 @@ void new_gets(char* str, int limit){
     str[strlen(str)] = '\0';//remove '\n'
     rewind(stdin);//clear stdin
 }
+
 void ReadFromFile (Record * Book, int * count, char buff[])
 {
     FILE * filePointer;
@@ -90,7 +93,7 @@ void ReadFromFile (Record * Book, int * count, char buff[])
 
     printf("Please enter a absolute path of file to open/save: ");
     scanf("%s", buff);
-    //strcpy(buff , "C:\\Users\\ysche\\Desktop\\Appointment Book list/data.txt\0");
+    strcpy(buff , "C:\\Users\\ysche\\Desktop\\Appointment Book list/data.txt\0");
     printf("Opening file: %s ....\n", buff);
     if( (filePointer = fopen(buff,"r")) == NULL){
         fclose(filePointer);
@@ -123,7 +126,7 @@ int menu(void)
     printf("*   1. Enter Record       4. Modify   *\n");
     printf("*   2. View Day           5. Delete   *\n");
     printf("*   3. View Week          6. Search   *\n");
-    printf("*   9. Quit                           *\n");
+    printf("*   7. Change             9. Quit     *\n");
     printf("***************************************\n");
     printf("\nPlease enter a choice:");
     scanf("%d", &pick); // get a choice from the user
@@ -196,18 +199,36 @@ void ShowDates(Record Book[], int count, char date[]) {
 
 }
 
-
-void Modify (Record Book [], int count)
-{
-    printf("\nModify -- to modify a record\n");
+void Change(Record Book [], int count){
+    printf("\nChange -- to change a record\n");
     int change1,change2;
-    printf("enter which two data modify\nfirst:");
+    printf("enter which two data change\nfirst:");
     scanf("%d",&change1);
     assert(change1<=count);
     printf("second:");
     scanf("%d",&change2);//enter two indexes to change
     assert(change2<=count);
     change(Book,change1-1,change2-1);//change value
+    print_data(Book,count);
+}
+
+void Modify (Record Book [], int count)
+{
+    printf("\nModify -- to modify a record\n");
+    int change;
+    printf("enter which two data modify:");
+    scanf("%d",&change);
+    assert(change<=count);//enter two indexes to change
+    change--;
+    rewind(stdin);
+    printf("Please enter WHOM you have an appointment with: <%d",WHO_LEN-1);
+    new_gets(Book[change].who,WHO_LEN);
+    printf("Please enter WHAT the event is: <%d",WHAT_LEN-1);
+    new_gets(Book[change].what,WHAT_LEN);
+    printf("Please enter WHEN (yyyymmddhhmm): <%d",WHEN_LEN-1);
+    new_gets(Book[change].when,WHEN_LEN);
+    printf("Please enter WHERE you have an appointment at: <%d",WHERE_LEN-1);
+    new_gets(Book[change].where,WHERE_LEN);
     print_data(Book,count);
 }
 
