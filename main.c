@@ -10,10 +10,10 @@
 #include <string.h>
 #include <assert.h>
 
-#define WHO_LEN 15
-#define WHAT_LEN 20
-#define WHEN_LEN 14
-#define WHERE_LEN 20
+#define WHO_LEN 16
+#define WHAT_LEN 21
+#define WHEN_LEN 15
+#define WHERE_LEN 21
 #define MAX_REC 10
 #define FILE_NAME_LEN 100
 // The record type
@@ -25,7 +25,7 @@ typedef struct {
 }Record;
 
 /** These are the function prototypes **/
-char* new_gets(char* str, int limit);
+void new_gets(char* str, int limit);
 void ReadFromFile (Record *, int *, char *);
 int menu(void);
 void EnterRecord (Record *, int *);
@@ -73,7 +73,7 @@ int main (void)
     }
 }
 
-char* new_gets(char* str, int limit){
+void new_gets(char* str, int limit){
     gets(str);//get string
     assert(strlen(str)<limit);//check string don't overflow
     str[strlen(str)] = '\0';//remove '\n'
@@ -132,13 +132,13 @@ int menu(void)
 void EnterRecord (Record Book[], int * count)
 {
     printf("\nEnterRecord -- to enter the who/what/when/where\n");
-    printf("Please enter WHOM you have an appointment with: ");
+    printf("Please enter WHOM you have an appointment with: <%d",WHO_LEN-1);
     new_gets(Book[*count].who,WHO_LEN);
-    printf("Please enter WHAT the event is: ");
+    printf("Please enter WHAT the event is: <%d",WHAT_LEN-1);
     new_gets(Book[*count].what,WHAT_LEN);
-    printf("Please enter WHEN (yyyymmddhhmm): ");
+    printf("Please enter WHEN (yyyymmddhhmm): <%d",WHEN_LEN-1);
     new_gets(Book[*count].when,WHEN_LEN);
-    printf("Please enter WHERE you have an appointment at: ");
+    printf("Please enter WHERE you have an appointment at: <%d",WHERE_LEN-1);
     new_gets(Book[*count].where,WHERE_LEN);
     printf("there are %d data\n", ++(*count));//read input
 
@@ -151,16 +151,22 @@ void EnterRecord (Record Book[], int * count)
 void ViewDay (Record Book[], int count)
 {
     char date[WHEN_LEN];
+    int end=1;
     printf("\nViewDay -- to show the appointments of a given day\n");
     printf("Please enter the day (yyyymmdd) to view: ");
     new_gets(date,WHEN_LEN);
     for(int i=0;i<count;i++){
-        if (strncmp(date, Book[i].when,strlen(date)) != 0) {//if date = when print data
+        if (strncmp(date, Book[i].when,strlen(date)) == 0) {//if date = when print data
+            printf("%d:\n",i);
             printf("Who: %s\n", Book[i].who);
             printf("What: %s\n", Book[i].what);
             printf("When: %s\n", Book[i].when);
             printf("Where: %s\n", Book[i].where);
+            end=0;
         }
+    }
+    if(end){//if no data match
+        printf("No data matches the criteria\n");
     }
 }
 
