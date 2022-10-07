@@ -36,7 +36,7 @@ void read_filename(char * filename);
 int main(){
     char input_filename[filename_size],output_filename[filename_size];
     scType *A=NULL;
-    switch (menu()) {
+    switch (menu()) {//choice the function
         case Random:
             random_data(input_filename);
             break;
@@ -48,14 +48,14 @@ int main(){
     output_file(A,output_filename);
 }
 
-void read_filename(char * filename) {
+void read_filename(char * filename) {//user input file name to read
     printf("Please enter the file name to open:(example:./data.txt)");
     scanf("%s",filename);//read output filename
     rewind(stdin);//clear
     assert(strlen(filename)<filename_size);//check the filename size legitimate
 }
 
-int menu() {
+int menu() {//show the detail function
     printf("1.random a data and sorting. 2.read a file:");
     int choice;
     scanf("%d",&choice);
