@@ -56,10 +56,17 @@ void read_filename(char * filename) {//user input file name to read
 }
 
 int menu() {//show the detail function
-    printf("1.random a data and sorting. 2.read a file:");
     int choice;
-    scanf("%d",&choice);
-    rewind(stdin);
+    while (1){
+        printf("1.random a data and sorting. 2.read a file:");
+        scanf("%d",&choice);
+        rewind(stdin);
+        if(choice==1 || choice==2){//check the choice is 1 or 2
+            break;
+        }else{
+            printf("Please enter a choice 1 or 2\n");
+        }
+    }
     return choice;
 }
 
