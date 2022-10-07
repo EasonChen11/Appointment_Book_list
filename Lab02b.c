@@ -26,6 +26,7 @@ int main(){
     char filename[filename_size];
     pb_type *normal_list=NULL,*ascending_order_list=NULL;//two link lists save the data
     readfile(&normal_list,&ascending_order_list,filename);
+    printf("close the file %s\nfinish!\n",filename);
 }
 
 void readfile(pb_type ** normal_list_head,pb_type ** ascending_order_list_head,char *filename) {//read data
