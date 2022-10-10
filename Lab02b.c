@@ -14,7 +14,7 @@ struct PhoneBook{
 };
 typedef struct PhoneBook pb_type;
 
-void readfile(pb_type ** normal_list_head,pb_type ** ascending_order_list_head,char *filename);
+int readfile(pb_type ** normal_list_head,pb_type ** ascending_order_list_head,char *filename);
 
 void AddData_to_Normal_List(pb_type **ascending_order_list_head,int input_phone_number,char username[]);
 
@@ -24,12 +24,13 @@ void printScore(pb_type *head);
 
 int main(){
     char filename[filename_size];
+    int finish;
     pb_type *normal_list=NULL,*ascending_order_list=NULL;//two link lists save the data
-    readfile(&normal_list,&ascending_order_list,filename);
-    printf("close the file:  %s\nfinish!\n",filename);
+    finish=readfile(&normal_list,&ascending_order_list,filename);
+    finish?printf("close %s\nfinish!\n",filename): printf("%s can't open\n",filename);
 }
 
-void readfile(pb_type ** normal_list_head,pb_type ** ascending_order_list_head,char *filename) {//read data
+int readfile(pb_type ** normal_list_head,pb_type ** ascending_order_list_head,char *filename) {//read data
     FILE *fp;
     printf("Please enter the file name to open:(example:./data.txt)");
     //fgets(filename, filename_size,stdin);
@@ -39,13 +40,15 @@ void readfile(pb_type ** normal_list_head,pb_type ** ascending_order_list_head,c
     if( (fp = fopen(filename,"r")) == NULL){//check open file legitimate
         fclose(fp);
         printf("cancel\n");
-        return;
+        return 0;
     }
     printf("read file:%s\n",filename);
     int input_phone_number;
     char username[name_size];
     while ( fscanf(fp, "%d",&input_phone_number)!=EOF){//check the file whether is ending
-        fgets(username,name_size,fp);//get user's name
+        fscanf(fp,"%s",username);//get user's name
+        assert(strlen(username)<name_size);//check username is legitimate
+        //fgets(username,name_size,fp);//fgets will read the space before the username
         rewind(stdin);//clear
         AddData_to_Normal_List(normal_list_head,input_phone_number,username);//add data in the according to the order of appearance link list
         AddData_to_Ascending_order_List(ascending_order_list_head,input_phone_number,username);//add data in the ascending order link list
@@ -55,6 +58,7 @@ void readfile(pb_type ** normal_list_head,pb_type ** ascending_order_list_head,c
     printScore(*normal_list_head);
     printf("ascending order list:\n");
     printScore(*ascending_order_list_head);
+    return 1;
 }
 
 void AddData_to_Normal_List(pb_type **ascending_order_list_head,int input_phone_number,char username[])//add data in the according to the order of appearance link list
@@ -104,7 +108,7 @@ void AddData_to_Ascending_order_List(pb_type **ascending_order_list_head,int inp
 void printScore(pb_type *head){//print the data on the screen
     printf("phone numbers\tnames\n");
     while (head){
-        printf("%d\t\t%s",head->phone_number,head->name);
+        printf("%d\t\t%s\n",head->phone_number,head->name);
         head=head->next;
     }
     printf("\n");
